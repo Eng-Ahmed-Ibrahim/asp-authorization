@@ -1,0 +1,33 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+
+namespace WebApi.Authorization;
+
+public class PermissionAuthorizationPolicyProvider
+    : DefaultAuthorizationPolicyProvider
+{
+    public PermissionAuthorizationPolicyProvider(
+        IOptions<AuthorizationOptions> options)
+        : base(options)
+    {
+    }
+
+    public override async Task<AuthorizationPolicy?> GetPolicyAsync(
+        string policyName)
+    {
+        var policy = await base.GetPolicyAsync(policyName);
+
+        if (policy != null)
+            return policy;
+
+        var policyBuilder = new AuthorizationPolicyBuilder();
+
+        policyBuilder
+            .AddRequirements(
+                new PermissionRequirment(policyName)
+            )
+            .RequireAuthenticatedUser();
+
+        return policyBuilder.Build();
+    }
+}
