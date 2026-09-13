@@ -11,15 +11,20 @@ using WebApi.Models;
 namespace WebApi.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(UserManager<ApplicationUser> _userManager, AppDbContext _context) : ControllerBase
+public class UsersController(UserManager<ApplicationUser> _userManager, AppDbContext _context,IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
 
     [HttpGet("all")]
     // [Authorize(Roles = Roles.Admin)]
     [HasPermission(Permissions.UsersRead)]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers(
+   
+    )
     {
+
         var users = await _userManager.Users.ToListAsync();
+        var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        Console.WriteLine($"UserId { userId}");
         var userDtos = users.Select(user => new
         {
             user.Id,

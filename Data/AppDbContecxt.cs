@@ -28,4 +28,5 @@ public class AppDbContext     : IdentityDbContext<
 
     }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Product> Products {get;set;}
 }

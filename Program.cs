@@ -30,6 +30,7 @@ builder.Services.AddIdentity<ApplicationUser, Role>()
 
 builder.Services.AddScoped<ISeeder, RolesSeeder>();
 builder.Services.AddScoped<ISeeder, UserSeeder>();
+builder.Services.AddScoped<ISeeder, ProductsSeeder>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
